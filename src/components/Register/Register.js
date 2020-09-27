@@ -10,7 +10,9 @@ function Register(props) {
     const [state , setState] = useState({
         full_name : "",
         email : "",
-        password : ""
+        password : "",
+        confirmPassword: "",
+        successMessage: null
     })
     const handleChange = (e) => {
         const {id , value} = e.target   
@@ -36,7 +38,7 @@ function Register(props) {
                 "email":state.email,
                 "password":state.password,
             }
-            axios.post(API_BASE_URL+'/user/register', payload)
+            axios.post(API_BASE_URL+'/api/user/register', payload)
                 .then(function (response) {
                     if(response.status === 200){
                         setState(prevState => ({
@@ -126,6 +128,14 @@ function Register(props) {
                         Register
                     </button>
                 </form>
+                
+                <div className="alert alert-success mt-2" style={{display: state.successMessage ? 'block' : 'none' }} role="alert">
+                {state.successMessage}
+                </div>
+                <div className="mt-2">
+                    <span>Already have an account? </span>
+                    <span className="loginText" onClick={() => redirectToLogin()}>Login here</span> 
+                </div>
             
         </Container>
     )
