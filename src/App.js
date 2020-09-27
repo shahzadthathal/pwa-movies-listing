@@ -10,25 +10,29 @@ import {
 
 import Register from './components/Register/Register';
 import Header from './components/Header/Header';
-
+import LatestMovies from './components/LatestMovies/LatestMovies';
 
 function App() {
   return (
     <Router>
-      <div className="App">
+    
 
           <Header />
 
-          <div className="container d-flex align-items-center flex-column">
-          <Switch>
-            <Route path="/" exact={true}>
-              <Register />
-            </Route>
-          </Switch>
-       </div>
-       
+            <Switch>
+              <Route path="/" exact={true}>
+                <LatestMovies />
+              </Route>
+              <Route path="/signup" exact={true}>
+                <Register />
+              </Route>
+              <Route path="/login" exact={true}>
+                <Register />
+              </Route>
+              
+            </Switch>
           
-      </div>
+    
     </Router>
   );
 }

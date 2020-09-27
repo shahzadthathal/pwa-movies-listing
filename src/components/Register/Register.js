@@ -4,9 +4,11 @@ import axios from 'axios';
 import './Register.css';
 import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../../constants/constants';
 import { withRouter } from "react-router-dom";
+import { Container, Breadcrumb, BreadcrumbItem} from 'reactstrap';
 
 function Register(props) {
     const [state , setState] = useState({
+        full_name : "",
         email : "",
         password : ""
     })
@@ -30,6 +32,7 @@ function Register(props) {
         if(state.email.length && state.password.length) {
             props.showError(null);
             const payload={
+                "full_name":state.full_name,
                 "email":state.email,
                 "password":state.password,
             }
@@ -64,49 +67,67 @@ function Register(props) {
     }
 
   return(
-        <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
-            <form>
-                <div className="form-group text-left">
-                <label htmlFor="exampleInputEmail1">Email address</label>
-                <input type="email" 
-                       className="form-control" 
-                       id="email" 
-                       aria-describedby="emailHelp" 
-                       placeholder="Enter email" 
-                       value={state.email}
-                       onChange={handleChange}
-                />
-                <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
-                </div>
-                <div className="form-group text-left">
-                    <label htmlFor="exampleInputPassword1">Password</label>
-                    <input type="password" 
+
+        <Container>
+                
+        <Breadcrumb className="mt-2" tag="nav" listTag="div">
+            <BreadcrumbItem active>Home</BreadcrumbItem>
+        </Breadcrumb>
+            
+                <form>
+                    <div className="form-group text-left">
+                    <label htmlFor="exampleInputEmail1">Full Name</label>
+                    <input type="text" 
                         className="form-control" 
-                        id="password" 
-                        placeholder="Password"
-                        value={state.password}
-                        onChange={handleChange} 
+                        id="full_name" 
+                        aria-describedby="emailHelp" 
+                        placeholder="Enter Full Name" 
+                        value={state.full_name}
+                        onChange={handleChange}
                     />
-                </div>
-                <div className="form-group text-left">
-                    <label htmlFor="exampleInputPassword1">Confirm Password</label>
-                    <input type="password" 
+                    </div>
+                    <div className="form-group text-left">
+                    <label htmlFor="exampleInputEmail1">Email address</label>
+                    <input type="email" 
                         className="form-control" 
-                        id="confirmPassword" 
-                        placeholder="Confirm Password"
-                        value={state.password}
-                        onChange={handleChange} 
+                        id="email" 
+                        aria-describedby="emailHelp" 
+                        placeholder="Enter email" 
+                        value={state.email}
+                        onChange={handleChange}
                     />
-                </div>
-                <button 
-                    type="submit" 
-                    className="btn btn-primary"
-                     onClick={handleSubmitClick}
-                >
-                    Register
-                </button>
-            </form>
-        </div>
+                    <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
+                    </div>
+                    <div className="form-group text-left">
+                        <label htmlFor="exampleInputPassword1">Password</label>
+                        <input type="password" 
+                            className="form-control" 
+                            id="password" 
+                            placeholder="Password"
+                            value={state.password}
+                            onChange={handleChange} 
+                        />
+                    </div>
+                    <div className="form-group text-left">
+                        <label htmlFor="exampleInputPassword1">Confirm Password</label>
+                        <input type="password" 
+                            className="form-control" 
+                            id="confirmPassword" 
+                            placeholder="Confirm Password"
+                            value={state.password}
+                            onChange={handleChange} 
+                        />
+                    </div>
+                    <button 
+                        type="submit" 
+                        className="btn btn-primary"
+                        onClick={handleSubmitClick}
+                    >
+                        Register
+                    </button>
+                </form>
+            
+        </Container>
     )
 }
 
