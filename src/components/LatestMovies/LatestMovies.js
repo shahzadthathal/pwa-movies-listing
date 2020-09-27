@@ -23,43 +23,34 @@ class LatestMovies extends Component{
 
     //This is called when an instance of this component is being created and inserted into the DOM.
     componentWillMount(){
+
         //Get latest movies
         axios.get(THEMOVIEDB_API_URL+'/3/movie/latest?api_key='+THEMOVIEDB_API_KEY+'&language=en-US')
             .then(response =>{
-                console.log("Fetching data in LatestMovies.js response")
-                console.log(response.data)
                 this.setState({ id: response.data.id });
                 this.setState({ title: response.data.title });
                 this.setState({ description: response.data.overview });
                 this.setState({ image: imageDummy });
-                console.log("response.data.poster_path")
-                console.log(response.data.poster_path)
                 if(response.data.poster_path){
-                    this.setState({ image: response.data.poster_path });
+                    this.setState({ image: 'https://image.tmdb.org/t/p/original/'+response.data.poster_path });
                 }
             })
             .catch(err=>{
                 console.log("Fetching data in LatestMovies.js err")
                 console.log(err)
             })
+
         //Get popular movies
         axios.get(THEMOVIEDB_API_URL+'/3/movie/popular?api_key='+THEMOVIEDB_API_KEY+'&language=en-US&page=1')
             .then(response =>{
-                console.log("Fetching Popular movies")
-                console.log(response.data)
-                console.log(response.data.results)
-                this.setState({moviesArr : response.data.results})
-                //console.log("Fetching data in LatestMovies.js response")
-                //console.log(response.data)
-                // this.setState({ id: response.data.id });
-                // this.setState({ title: response.data.title });
-                // this.setState({ description: response.data.overview });
-                // this.setState({ image: imageDummy });
-                // console.log("response.data.poster_path")
-                // console.log(response.data.poster_path)
-                // if(response.data.poster_path){
-                //     this.setState({ image: response.data.poster_path });
-                // }
+                let modifiedRes =  response.data.results.map((item,index)=>{
+                    response.data.results[index].image = imageDummy
+                    if(item.poster_path){
+                        response.data.results[index].image = 'https://image.tmdb.org/t/p/w200/'+item.poster_path;
+                    }
+                    return item;
+                });
+                this.setState({moviesArr : modifiedRes})
             })
             .catch(err=>{
                 console.log("Fetching data in LatestMovies.js err")
@@ -84,7 +75,7 @@ class LatestMovies extends Component{
                                 <CardBody>
                                     <CardTitle>{this.state.title}</CardTitle>
                                     <CardText>{this.state.description.substring(0,100)}</CardText>
-                                    <Link to={`/movie/detail/${this.state.id}`} className="btn btn-secondary btn-lg active">Detail</Link>
+                                    <Link to={`/movie-detail/${this.state.id}`} className="btn btn-secondary btn-lg active">Detail</Link>
                                 </CardBody>
                             </Card>
                         </Col>
@@ -95,11 +86,11 @@ class LatestMovies extends Component{
                         {this.state.moviesArr.map((item,index) =>(
                             <Col sm="6">
                                 <Card className="mt-2">
-                                    {/* <CardImg top width="" src={item.poster_path} alt={item.title} /> */}
+                                    <CardImg top width="" src={item.image} alt={item.title} />
                                     <CardBody>
                                         <CardTitle>{item.title}</CardTitle>
                                         <CardText>{item.overview.substring(0,100)}</CardText>
-                                        <Link to={`/movie/detail/${item.id}`} className="btn btn-secondary btn-lg active">Detail</Link>
+                                        <Link to={`/movie-detail/${item.id}`} className="btn btn-secondary btn-lg active">Detail</Link>
                                     </CardBody>
                                 </Card>
                             </Col>

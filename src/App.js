@@ -11,7 +11,7 @@ import {
 import Register from './components/Register/Register';
 import Header from './components/Header/Header';
 import LatestMovies from './components/LatestMovies/LatestMovies';
-
+import MovieDetail from './components/MovieDetail/MovieDetail';
 function App() {
   return (
     <Router>
@@ -23,6 +23,9 @@ function App() {
               <Route path="/" exact={true}>
                 <LatestMovies />
               </Route>
+              <Route path="/movie-detail/:id" component={MovieDetail} />
+               
+
               <Route path="/signup" exact={true}>
                 <Register />
               </Route>
