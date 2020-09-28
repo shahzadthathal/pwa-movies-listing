@@ -38,6 +38,7 @@ function Register(props) {
                 "email":state.email,
                 "password":state.password,
             }
+            console.log("API_BASE_URL: "+API_BASE_URL)
             axios.post(API_BASE_URL+'/api/user/register', payload)
                 .then(function (response) {
                     if(response.status === 200){
@@ -45,7 +46,8 @@ function Register(props) {
                             ...prevState,
                             'successMessage' : 'Registration successful. Redirecting to home page..'
                         }))
-                        redirectToHome();
+                        localStorage.setItem(ACCESS_TOKEN_NAME,response.data.token);
+                        redirectToProfile();
                         props.showError(null)
                     } else{
                         props.showError("Some error ocurred");
@@ -59,9 +61,9 @@ function Register(props) {
         }
         
     }
-    const redirectToHome = () => {
-        props.updateTitle('Home')
-        props.history.push('/home');
+    const redirectToProfile = () => {
+        props.updateTitle('Profile')
+        props.history.push('/profile');
     }
     const redirectToLogin = () => {
         props.updateTitle('Login')

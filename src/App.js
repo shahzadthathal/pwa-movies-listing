@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
 
 import {
@@ -20,6 +20,11 @@ import Register from './components/Register/Register';
 import Login from './components/Login/Login';
 import AlertComponent from './components/AlertComponent/AlertComponent';  
 
+import PrivateRoute from './utils/PrivateRoute';
+import Profile from './components/Profile/Profile';
+
+
+
 
 function App() {
   const [title, updateTitle] = useState(null);
@@ -30,6 +35,8 @@ function App() {
 
           <Header />
 
+          <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>
+
             <Switch>
               <Route path="/" exact={true}>
                 <Home />
@@ -37,6 +44,10 @@ function App() {
                <Route path="/home" exact={true}>
                 <Home />
               </Route>
+
+              <PrivateRoute path="/profile">
+                <Profile/>
+              </PrivateRoute>
 
               <Route path="/latest-movies" exact={true}>
                 <LatestMovies />
@@ -61,8 +72,6 @@ function App() {
               </Route>
               
             </Switch>
-
-            <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>
           
     
     </Router>

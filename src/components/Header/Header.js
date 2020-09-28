@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import { withRouter } from "react-router-dom";
 import logo from '../../logo.svg';
+import {ACCESS_TOKEN_NAME} from '../../constants/constants';
+
 import {
 	Collapse,
 	Navbar,
@@ -13,12 +16,45 @@ import {
 	DropdownMenu,
 	DropdownItem
   } from 'reactstrap';
-import { Link, Route, Switch } from "react-router-dom";
+//import { Link, Route, Switch } from "react-router-dom";
 
 
 function Header(props) {
 	const [collapsed, setCollapsed] = useState(true);
 	const toggleNavbar = () => setCollapsed(!collapsed);
+
+	function renderOnBoardMethods() {
+		//APPLY OTHER LOGIC
+		if(localStorage.getItem(ACCESS_TOKEN_NAME)){
+			return(
+				<Nav className="ml-auto" navbar>
+	            	<NavItem>
+						<NavLink href="#" onClick={() => handleLogout()}>Logout</NavLink>
+				  	</NavItem>
+				</Nav>
+            )
+		}else{
+			return(
+				<Nav className="ml-auto" navbar>
+					<NavItem>
+						<NavLink  href="/signup">Signup</NavLink>
+					</NavItem>
+					<NavItem>
+						<NavLink href="/login">Login</NavLink>
+					</NavItem>
+				</Nav>
+			 )
+		}
+
+        //if(props.location.pathname === '/profile'){}
+
+
+    }
+    function handleLogout() {
+        localStorage.removeItem(ACCESS_TOKEN_NAME)
+        props.history.push('/login')
+    }
+
     return(
 
 		<Navbar color="light" light expand="md">
@@ -50,18 +86,15 @@ function Header(props) {
 			</UncontrolledDropdown>
 
 		  </Nav>
-		  <Nav className="ml-auto" navbar>
-			<NavItem>
-				<NavLink  href="/signup">Signup</NavLink>
-			  </NavItem>
-			  <NavItem>
-				<NavLink href="/login">Login</NavLink>
-			  </NavItem>
-		  </Nav>
+		  
+			  
+			  {renderOnBoardMethods()}
+		  
 		</Collapse>
 	  </Navbar>
 
 
     )
 }
-export default Header;
+
+export default withRouter(Header);

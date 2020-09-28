@@ -1,11 +1,23 @@
 import React, {Component} from 'react';
-import { Container, Row, Col, Breadcrumb, BreadcrumbItem, Card, Button, CardImg, CardTitle, CardText, CardGroup,
-    CardSubtitle, CardBody} from 'reactstrap';
+import { 
+    Container, 
+    //Row, 
+    Col, 
+    Breadcrumb, 
+    BreadcrumbItem, 
+    Card, 
+    //Button, 
+    CardImg, 
+    CardTitle, 
+    CardText, 
+    //CardGroup,
+    //CardSubtitle, 
+    CardBody
+} from 'reactstrap';
 import './PopularMovies.css';
 import axios from 'axios';
 import imageDummy from '../../images/318x180.svg';
-import { Link, Route } from "react-router-dom";
-import MovieDetail from '../MovieDetail/MovieDetail';
+import { Link } from "react-router-dom";
 import {THEMOVIEDB_API_URL, THEMOVIEDB_API_KEY} from '../../constants/constants';
 
 class PopularMovies extends Component{
@@ -51,7 +63,8 @@ class PopularMovies extends Component{
             <Container>
                
                     <Breadcrumb className="mt-2" tag="nav" listTag="div">
-                        <BreadcrumbItem active>Home</BreadcrumbItem>
+                        <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
+                        <BreadcrumbItem active>Popular</BreadcrumbItem>
                     </Breadcrumb>
                
                     <h1 className="mt-2">Popular Movies</h1>

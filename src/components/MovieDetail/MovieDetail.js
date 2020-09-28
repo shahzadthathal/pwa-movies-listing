@@ -1,10 +1,22 @@
 import React, {Component} from 'react';
-import { Container, Row, Col, Breadcrumb, BreadcrumbItem, Card, Button, CardImg, CardTitle, CardText, CardGroup,
-    CardSubtitle, CardBody} from 'reactstrap';
+import { 
+    Container, 
+    //Row, 
+    Col, 
+    Breadcrumb, 
+    BreadcrumbItem, 
+    Card, 
+    //Button, 
+    CardImg, 
+    CardTitle, 
+    CardText, 
+    //CardGroup,
+    //CardSubtitle, 
+    CardBody
+} from 'reactstrap';
 import axios from 'axios';
 import './MovieDetail.css';
 import imageDummy from '../../images/318x180.svg';
-import { BrowserRouter, Link} from 'react-router-dom';
 import {THEMOVIEDB_API_URL, THEMOVIEDB_API_KEY} from '../../constants/constants';
 
 

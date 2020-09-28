@@ -10,7 +10,8 @@ import { Container, Breadcrumb, BreadcrumbItem} from 'reactstrap';
 function Login(props) {
     const [state , setState] = useState({
         email : "",
-        password : ""
+        password : "",
+        successMessage: null
     })
     const handleChange = (e) => {
         const {id , value} = e.target   
@@ -19,46 +20,38 @@ function Login(props) {
             [id] : value
         }))
     }
+
     const handleSubmitClick = (e) => {
         e.preventDefault();
-        if(state.password === state.confirmPassword) {
-            sendDetailsToServer()    
-        } else {
-            props.showError('Passwords do not match');
+        const payload={
+            "email":state.email,
+            "password":state.password,
         }
+        axios.post(API_BASE_URL+'/api/user/login', payload)
+            .then(function (response) {
+                if(response.status === 200){
+                    setState(prevState => ({
+                        ...prevState,
+                        'successMessage' : 'Login successful. Redirecting to home page..'
+                    }))
+                    localStorage.setItem(ACCESS_TOKEN_NAME,response.data.token);
+                    redirectToProfile();
+                    props.showError(null)
+                }
+                else if(response.code === 204){
+                    props.showError("Username and password do not match");
+                }
+                else{
+                    props.showError("Username does not exists");
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
-
-    const sendDetailsToServer = () => {
-        if(state.email.length && state.password.length) {
-            props.showError(null);
-            const payload={
-                "email":state.email,
-                "password":state.password,
-            }
-            axios.post(API_BASE_URL+'/user/login', payload)
-                .then(function (response) {
-                    if(response.status === 200){
-                        setState(prevState => ({
-                            ...prevState,
-                            'successMessage' : 'Login successful. Redirecting to home page..'
-                        }))
-                        redirectToHome();
-                        props.showError(null)
-                    } else{
-                        props.showError("Some error ocurred");
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });    
-        } else {
-            props.showError('Please enter valid username and password')    
-        }
-        
-    }
-    const redirectToHome = () => {
-        props.updateTitle('Home')
-        props.history.push('/home');
+    const redirectToProfile = () => {
+        props.updateTitle('Profile')
+        props.history.push('/profile');
     }
     const redirectToRegister = () => {
         props.history.push('/signup'); 

@@ -1,11 +1,23 @@
 import React, {Component} from 'react';
-import { Container, Row, Col, Breadcrumb, BreadcrumbItem, Card, Button, CardImg, CardTitle, CardText, CardGroup,
-    CardSubtitle, CardBody} from 'reactstrap';
+import { 
+    Container, 
+    //Row, 
+    Col, 
+    Breadcrumb, 
+    BreadcrumbItem, 
+    Card, 
+    //Button, 
+    CardImg, 
+    CardTitle, 
+    CardText, 
+    //CardGroup,
+    //CardSubtitle, 
+    CardBody
+} from 'reactstrap';
 import './LatestMovies.css';
 import axios from 'axios';
 import imageDummy from '../../images/318x180.svg';
-import { Link, Route } from "react-router-dom";
-import MovieDetail from '../MovieDetail/MovieDetail';
+import { Link } from "react-router-dom";
 import {THEMOVIEDB_API_URL, THEMOVIEDB_API_KEY} from '../../constants/constants';
 
 class LatestMovies extends Component{
