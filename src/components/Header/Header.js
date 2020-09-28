@@ -26,27 +26,25 @@ function Header(props) {
 		<NavbarToggler onClick={toggleNavbar} />
 		<Collapse isOpen={!collapsed} navbar>
 		  <Nav className="mr-auto" navbar>
-			<NavItem>
-			  <NavLink href="/">All Movies</NavLink>
-			</NavItem>
-			<NavItem>
-			  <NavLink href="/">All Reviews</NavLink>
-			</NavItem>
 			<UncontrolledDropdown nav inNavbar>
 			  <DropdownToggle nav caret>
 				Movies by Category
 			  </DropdownToggle>
 			  <DropdownMenu right>
-				<DropdownItem>
-				  Popular Movies
+			  	<DropdownItem>
+					<NavLink  href="/latest-movies">Latest Movie</NavLink>
 				</DropdownItem>
 				<DropdownItem divider />
 				<DropdownItem>
-				  Top Rated Movies
+					<NavLink  href="/popular-movies">Popular Movies</NavLink>
 				</DropdownItem>
 				<DropdownItem divider />
 				<DropdownItem>
-				  Upcoming Movies
+					<NavLink  href="/top-rated-movies">Top Rated Movies</NavLink>
+				</DropdownItem>
+				<DropdownItem divider />
+				<DropdownItem>
+				  <NavLink  href="/upcoming-movies">Upcoming Movies</NavLink>
 				</DropdownItem>
 			  </DropdownMenu>
 			</UncontrolledDropdown>
@@ -64,28 +62,6 @@ function Header(props) {
 	  </Navbar>
 
 
-    //    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	// 	  <a class="navbar-brand" href="#">PWA Movies Listing</a>
-	// 	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-	// 	    <span class="navbar-toggler-icon"></span>
-	// 	  </button>
-	// 	  <div class="collapse navbar-collapse" id="navbarText">
-	// 	    <ul class="navbar-nav mr-auto">
-	// 	      <li class="nav-item active">
-	// 	        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-	// 	      </li>
-	// 	      <li class="nav-item">
-	// 	        <a class="nav-link" href="#">Signup</a>
-	// 	      </li>
-	// 	      <li class="nav-item">
-	// 	        <a class="nav-link" href="#">Login</a>
-	// 	      </li>
-	// 	    </ul>
-	// 	    <span class="navbar-text">
-	// 	      Navbar text with an inline element
-	// 	    </span>
-	// 	  </div>
-	// 	</nav>
     )
 }
 export default Header;

@@ -73,7 +73,8 @@ function Register(props) {
         <Container>
                 
         <Breadcrumb className="mt-2" tag="nav" listTag="div">
-            <BreadcrumbItem active>Home</BreadcrumbItem>
+            <BreadcrumbItem> <a href="/">Home</a> </BreadcrumbItem>
+            <BreadcrumbItem active>Register</BreadcrumbItem>
         </Breadcrumb>
             
                 <form>
@@ -111,24 +112,24 @@ function Register(props) {
                         />
                     </div>
                     <div className="form-group text-left">
-                        <label htmlFor="exampleInputPassword1">Confirm Password</label>
+                        <label htmlFor="exampleInputPassword2">Confirm Password</label>
                         <input type="password" 
                             className="form-control" 
                             id="confirmPassword" 
                             placeholder="Confirm Password"
-                            value={state.password}
+                            value={state.confirmPassword}
                             onChange={handleChange} 
                         />
                     </div>
                     <button 
                         type="submit" 
-                        className="btn btn-primary"
+                        className="btn btn-secondary"
                         onClick={handleSubmitClick}
                     >
                         Register
                     </button>
                 </form>
-                
+
                 <div className="alert alert-success mt-2" style={{display: state.successMessage ? 'block' : 'none' }} role="alert">
                 {state.successMessage}
                 </div>
@@ -141,4 +142,4 @@ function Register(props) {
     )
 }
 
-export default Register;
+export default withRouter(Register);

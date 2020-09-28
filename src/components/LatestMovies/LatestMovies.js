@@ -17,7 +17,6 @@ class LatestMovies extends Component{
             title: '',
             image: '',
             description:'',
-            moviesArr:[],
         };
     }
 
@@ -40,22 +39,6 @@ class LatestMovies extends Component{
                 console.log(err)
             })
 
-        //Get popular movies
-        axios.get(THEMOVIEDB_API_URL+'/3/movie/popular?api_key='+THEMOVIEDB_API_KEY+'&language=en-US&page=1')
-            .then(response =>{
-                let modifiedRes =  response.data.results.map((item,index)=>{
-                    response.data.results[index].image = imageDummy
-                    if(item.poster_path){
-                        response.data.results[index].image = 'https://image.tmdb.org/t/p/w200/'+item.poster_path;
-                    }
-                    return item;
-                });
-                this.setState({moviesArr : modifiedRes})
-            })
-            .catch(err=>{
-                console.log("Fetching data in LatestMovies.js err")
-                console.log(err)
-            })
     }
 
     //The render method contains the JSX code which will be compiled to HTML.
@@ -69,7 +52,7 @@ class LatestMovies extends Component{
                
                     <h1 className="mt-2">Latest Movies</h1>
                     <div className="row">
-                        <Col sm="6">
+                        <Col>
                             <Card className="">
                                 <CardImg top width="" src={this.state.image} alt={this.state.title} />
                                 <CardBody>
@@ -81,22 +64,7 @@ class LatestMovies extends Component{
                         </Col>
                     </div>
                
-                    <h2 className="mt-2">Popular Movies</h2>
-                    <div className="row">
-                        {this.state.moviesArr.map((item,index) =>(
-                            <Col sm="6">
-                                <Card className="mt-2">
-                                    <CardImg top width="" src={item.image} alt={item.title} />
-                                    <CardBody>
-                                        <CardTitle>{item.title}</CardTitle>
-                                        <CardText>{item.overview.substring(0,100)}</CardText>
-                                        <Link to={`/movie-detail/${item.id}`} className="btn btn-secondary btn-lg active">Detail</Link>
-                                    </CardBody>
-                                </Card>
-                            </Col>
-                        ))}
-                    </div>
-
+                   
             </Container>
         )
     }

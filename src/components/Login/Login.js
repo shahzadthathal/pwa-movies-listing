@@ -4,8 +4,10 @@ import axios from 'axios';
 import './Login.css';
 import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../../constants/constants';
 import { withRouter } from "react-router-dom";
+import { Container, Breadcrumb, BreadcrumbItem} from 'reactstrap';
 
-function Register(props) {
+
+function Login(props) {
     const [state , setState] = useState({
         email : "",
         password : ""
@@ -58,13 +60,20 @@ function Register(props) {
         props.updateTitle('Home')
         props.history.push('/home');
     }
-    const redirectToLogin = () => {
-        props.updateTitle('Login')
-        props.history.push('/login'); 
+    const redirectToRegister = () => {
+        props.history.push('/signup'); 
+        props.updateTitle('Register');
     }
 
   return(
-        <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
+
+        <Container>
+                
+        <Breadcrumb className="mt-2" tag="nav" listTag="div">
+            <BreadcrumbItem> <a href="/">Home</a> </BreadcrumbItem>
+            <BreadcrumbItem active>Login</BreadcrumbItem>
+        </Breadcrumb>
+
             <form>
                 <div className="form-group text-left">
                 <label htmlFor="exampleInputEmail1">Email address</label>
@@ -79,35 +88,34 @@ function Register(props) {
                 <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
                 </div>
                 <div className="form-group text-left">
-                    <label htmlFor="exampleInputPassword1">Password</label>
-                    <input type="password" 
-                        className="form-control" 
-                        id="password" 
-                        placeholder="Password"
-                        value={state.password}
-                        onChange={handleChange} 
-                    />
+                <label htmlFor="exampleInputPassword1">Password</label>
+                <input type="password" 
+                       className="form-control" 
+                       id="password" 
+                       placeholder="Password"
+                       value={state.password}
+                       onChange={handleChange} 
+                />
                 </div>
-                <div className="form-group text-left">
-                    <label htmlFor="exampleInputPassword1">Confirm Password</label>
-                    <input type="password" 
-                        className="form-control" 
-                        id="confirmPassword" 
-                        placeholder="Confirm Password"
-                        value={state.password}
-                        onChange={handleChange} 
-                    />
+                <div className="form-check">
                 </div>
                 <button 
                     type="submit" 
-                    className="btn btn-primary"
-                     onClick={handleSubmitClick}
-                >
-                    Login
-                </button>
+                    className="btn btn-secondary"
+                    onClick={handleSubmitClick}
+                >Submit</button>
             </form>
-        </div>
+
+            <div className="alert alert-success mt-2" style={{display: state.successMessage ? 'block' : 'none' }} role="alert">
+                {state.successMessage}
+            </div>
+            <div className="registerMessage">
+                <span>Dont have an account? </span>
+                <span className="loginText" onClick={() => redirectToRegister()}>Register</span> 
+            </div>
+
+        </Container>
     )
 }
 
-export default Register;
+export default withRouter(Login);
