@@ -4,6 +4,7 @@ import logo from '../../logo.svg';
 import {ACCESS_TOKEN_NAME} from '../../constants/constants';
 
 import {
+	Container,
 	Collapse,
 	Navbar,
 	NavbarToggler,
@@ -56,44 +57,37 @@ function Header(props) {
     }
 
     return(
-
 		<Navbar color="light" light expand="md">
-		<NavbarBrand href="/"><img src={logo}  alt="PWA App 2020" width="60" height="40" /></NavbarBrand>
-		<NavbarToggler onClick={toggleNavbar} />
-		<Collapse isOpen={!collapsed} navbar>
-		  <Nav className="mr-auto" navbar>
-			<UncontrolledDropdown nav inNavbar>
-			  <DropdownToggle nav caret>
-				Movies by Category
-			  </DropdownToggle>
-			  <DropdownMenu right>
-			  	<DropdownItem>
-					<NavLink  href="/latest-movies">Latest Movie</NavLink>
-				</DropdownItem>
-				<DropdownItem divider />
-				<DropdownItem>
-					<NavLink  href="/popular-movies">Popular Movies</NavLink>
-				</DropdownItem>
-				<DropdownItem divider />
-				<DropdownItem>
-					<NavLink  href="/top-rated-movies">Top Rated Movies</NavLink>
-				</DropdownItem>
-				<DropdownItem divider />
-				<DropdownItem>
-				  <NavLink  href="/upcoming-movies">Upcoming Movies</NavLink>
-				</DropdownItem>
-			  </DropdownMenu>
-			</UncontrolledDropdown>
-
-		  </Nav>
-		  
-			  
-			  {renderOnBoardMethods()}
-		  
-		</Collapse>
-	  </Navbar>
-
-
+			<NavbarBrand href="/"><img src={logo}  alt="PWA App 2020" width="60" height="40" /></NavbarBrand>
+			<NavbarToggler onClick={toggleNavbar} />
+				<Collapse isOpen={!collapsed} navbar>
+				    <Nav className="mr-auto" navbar>
+						<UncontrolledDropdown nav inNavbar>
+					  <DropdownToggle nav caret>
+						Movies by Category
+					  </DropdownToggle>
+					  <DropdownMenu right>
+					  	<DropdownItem>
+							<NavLink  href="/latest-movies">Latest Movie</NavLink>
+						</DropdownItem>
+						<DropdownItem divider />
+						<DropdownItem>
+							<NavLink  href="/popular-movies">Popular Movies</NavLink>
+						</DropdownItem>
+						<DropdownItem divider />
+						<DropdownItem>
+							<NavLink  href="/top-rated-movies">Top Rated Movies</NavLink>
+						</DropdownItem>
+						<DropdownItem divider />
+						<DropdownItem>
+						  <NavLink  href="/upcoming-movies">Upcoming Movies</NavLink>
+						</DropdownItem>
+					  </DropdownMenu>
+						</UncontrolledDropdown>
+				    </Nav>
+					{renderOnBoardMethods()}
+				</Collapse>
+		 </Navbar>
     )
 }
 

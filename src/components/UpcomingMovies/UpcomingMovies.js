@@ -17,6 +17,7 @@ import {
 import './UpcomingMovies.css';
 import axios from 'axios';
 import imageDummy from '../../images/318x180.svg';
+import thumbUpLike from '../../images/like.svg';
 import { Link } from "react-router-dom";
 import {THEMOVIEDB_API_URL, THEMOVIEDB_API_KEY} from '../../constants/constants';
 
@@ -74,9 +75,19 @@ class UpcomingMovies extends Component{
                                 <Card className="mt-4">
                                     <CardImg top width="" src={item.image} alt={item.title} />
                                     <CardBody>
-                                        <CardTitle>{item.title}</CardTitle>
+                                        <CardTitle>{item.title}
+                                            <span class="badge badge-info float-right ml-1"> <img width="18" height="13" src={thumbUpLike} /> {item.vote_count} </span>
+                                        </CardTitle>
                                         <CardText>{item.overview.substring(0,100)}</CardText>
-                                        <Link to={`/movie-detail/${item.id}`} className="btn btn-secondary btn-lg active">Detail</Link>
+                                        <ul class="list-group mt-1 mb-1">
+                                            <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                                             Release date: {item.release_date}
+                                            </li>
+                                            <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                                             Original language: {item.original_language.toUpperCase()}
+                                            </li>
+                                        </ul>
+                                        <Link to={`/movie-detail/${item.id}`} className="btn btn-secondary btn-md  mx-auto d-block">Detail</Link>
                                     </CardBody>
                                 </Card>
                             </Col>

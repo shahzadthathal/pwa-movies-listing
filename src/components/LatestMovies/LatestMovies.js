@@ -70,7 +70,7 @@ class LatestMovies extends Component{
                                 <CardBody>
                                     <CardTitle>{this.state.title}</CardTitle>
                                     <CardText>{this.state.description.substring(0,100)}</CardText>
-                                    <Link to={`/movie-detail/${this.state.id}`} className="btn btn-secondary btn-lg active">Detail</Link>
+                                    <Link to={`/movie-detail/${this.state.id}`} className="btn btn-secondary btn-md  mx-auto d-block">Detail</Link>
                                 </CardBody>
                             </Card>
                         </Col>

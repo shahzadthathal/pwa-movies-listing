@@ -10,6 +10,7 @@ import {
 
 import Header from './components/Header/Header';
 import Home from './components/Home/Home';
+import Footer from './components/Footer/Footer';
 import LatestMovies from './components/LatestMovies/LatestMovies';
 import PopularMovies from './components/PopularMovies/PopularMovies';
 import TopRatedMovies from './components/TopRatedMovies/TopRatedMovies';
@@ -73,6 +74,7 @@ function App() {
               
             </Switch>
           
+          <Footer />
     
     </Router>
   );
