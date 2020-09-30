@@ -30,6 +30,9 @@ function Header(props) {
 			return(
 				<Nav className="ml-auto" navbar>
 	            	<NavItem>
+						<NavLink href="#" onClick={() => handleProfile()}>Profile</NavLink>
+				  	</NavItem>
+				  	<NavItem>
 						<NavLink href="#" onClick={() => handleLogout()}>Logout</NavLink>
 				  	</NavItem>
 				</Nav>
@@ -53,8 +56,12 @@ function Header(props) {
     }
     function handleLogout() {
         localStorage.removeItem(ACCESS_TOKEN_NAME)
-        props.history.push('/login')
+        props.history.push('/home')
     }
+    function handleProfile() {
+        props.history.push('/profile')
+    }
+    
 
     return(
 		<Navbar color="light" light expand="md">

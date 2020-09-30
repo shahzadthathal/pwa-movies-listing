@@ -3,10 +3,11 @@ import React, {useState} from 'react';
 import axios from 'axios';
 import './Register.css';
 import {API_BASE_URL, ACCESS_TOKEN_NAME} from '../../constants/constants';
-import { withRouter } from "react-router-dom";
+import { withRouter , Redirect} from "react-router-dom";
 import { Container, Breadcrumb, BreadcrumbItem} from 'reactstrap';
 
 function Register(props) {
+
     const [state , setState] = useState({
         full_name : "",
         email : "",
@@ -14,6 +15,7 @@ function Register(props) {
         confirmPassword: "",
         successMessage: null
     })
+   
     const handleChange = (e) => {
         const {id , value} = e.target   
         setState(prevState => ({
@@ -70,9 +72,16 @@ function Register(props) {
         props.history.push('/login'); 
     }
 
+    function isLogedIn() {
+        if(localStorage.getItem(ACCESS_TOKEN_NAME))
+            return <Redirect to='/profile' />
+    }
+
   return(
 
         <Container>
+
+        {isLogedIn()}
                 
         <Breadcrumb className="mt-2" tag="nav" listTag="div">
             <BreadcrumbItem> <a href="/">Home</a> </BreadcrumbItem>

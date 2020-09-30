@@ -36,8 +36,6 @@ function App() {
 
           <Header />
 
-          <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>
-
             <Switch>
               <Route path="/" exact={true}>
                 <Home />
@@ -73,6 +71,8 @@ function App() {
               </Route>
               
             </Switch>
+
+            <AlertComponent errorMessage={errorMessage} hideError={updateErrorMessage}/>
           
           <Footer />
     

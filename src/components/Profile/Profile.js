@@ -49,6 +49,7 @@ function Profile(props) {
             }
         })
         .catch(function (error) {
+          localStorage.removeItem(ACCESS_TOKEN_NAME)
           redirectToLogin()
         });
       })
