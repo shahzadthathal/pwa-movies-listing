@@ -8,3 +8,7 @@
     color: green;
     font-weight: bold;
 }
+
+.btn-secondary{
+	cursor:pointer
+}
