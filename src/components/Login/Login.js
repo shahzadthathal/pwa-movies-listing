@@ -48,7 +48,8 @@ function Login(props) {
                 }
             })
             .catch(function (error) {
-                console.log(error);
+                console.log(error.message);
+                props.showError(error.message);
             });
     }
     const redirectToProfile = () => {
