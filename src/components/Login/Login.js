@@ -105,6 +105,7 @@ function Login(props) {
                 <button 
                     type="submit" 
                     className="btn btn-secondary"
+                    style={{"pointer-events": "all"}}
                     onClick={handleSubmitClick}
                 >Submit</button>
             </form>
