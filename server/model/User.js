@@ -16,7 +16,8 @@ const UserSchema = mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now()
-  }
+  },
+  favoriteItemsArr:[],
 });
 
 // export model user with UserSchema

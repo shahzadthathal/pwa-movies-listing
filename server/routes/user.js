@@ -7,13 +7,150 @@ const router = express.Router();
 const User = require("../model/User");
 const auth = require("../middleware/auth")
 
+
+
+/**
+ * @method - POST
+ * @description - Check item into user favorite list
+ * @param - /user/check-favorite
+ */
+router.post("/check-favorite", auth, [
+        check('id', "Please select movie").not().isEmpty(),
+    ], async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+            return res.status(400).json({
+                errors: errors.array(),
+                msg: "Please select movie"
+            });
+      }
+      const itemId = parseInt(req.body.id);
+      console.log("typeof itme id")
+      console.log(typeof(itemId))
+      const userId = req.user.id;
+      console.log("itemId "+itemId)
+      console.log("userId "+userId)
+      let favItemExists = await User.findOne({
+                _id:userId,
+                favoriteItemsArr:itemId
+            });
+      console.log("favItemExists")
+      console.log(favItemExists)
+      if (favItemExists) {
+          return res.status(200).json({
+              isFavorite:true,
+          });
+      }else{
+        return res.status(200).json({
+              isFavorite:false,
+          });
+      }
+    } catch (err) {
+      throw err;
+      return res.status(500).json({
+            msg: "Server Error",
+            error: err.message
+
+          });
+    }
+  });
+
+
+
+
+/**
+ * @method - POST
+ * @description - Add item into user favorite list
+ * @param - /user/add-favorite
+ */
+router.post("/add-favorite", auth, [
+        check('id', "Please select movie").not().isEmpty(),
+    ], async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+            return res.status(400).json({
+                errors: errors.array(),
+                msg: "Please select movie"
+            });
+      }
+      const itemId = req.body.id;
+      const userId = req.user.id;
+      let favItemExists = await User.findOne({
+                _id:userId,
+                favoriteItemsArr:itemId
+            });
+      console.log("add favItemExists")
+      console.log(favItemExists)
+      if (favItemExists) {
+          return res.status(403).json({
+              msg: "Item already exists"
+          });
+      }else{
+
+        let updateObj = {};
+
+        if(favItemExists){
+              console.log("req 1")
+              if(favItemExists.favoriteItemsArr==null){
+                console.log("req 2")
+                updateObj.favoriteItemsArr = [];
+              }
+              else{
+                console.log("req 3")
+                updateObj.favoriteItemsArr = favItemExists.favoriteItemsArr;
+              }
+        }else{
+            console.log("req 4")
+            let userFound = await User.findOne({_id:userId});
+            if(userFound.favoriteItemsArr){
+              updateObj.favoriteItemsArr = userFound.favoriteItemsArr;
+            }else{
+              updateObj.favoriteItemsArr = [];
+            }
+            
+        }
+
+        // updateObj.favoriteItemsArr.push({
+        //     item_id:itemId,
+        //     created_at:Date.now()
+        // });
+        console.log(updateObj)
+        updateObj.favoriteItemsArr.push(itemId);
+
+        await User.findOneAndUpdate({'_id': userId}, {$set:updateObj}, {new: true}, (err, user) => {
+            if (err){
+              return res.status(500).json({
+                msg: "Server Error",
+                error: err.message
+
+              });
+            }
+            if(user) {
+              return res.status(200).send({ msg: "Item added into favorite list." });
+            } else {
+                return res.status(500).json({
+                msg: "User not found",
+              });
+            }
+        });
+      }
+    } catch (err) {
+      throw err;
+      return res.status(500).json({
+            msg: "Server Error",
+            error: err.message
+
+          });
+    }
+  });
+
 /**
  * @method - GET
  * @description - Get LoggedIn User
  * @param - /user/me
  */
-
-
 router.get("/me", auth, async (req, res) => {
     try {
       // request.user is getting fetched from Middleware after token authentication
@@ -167,6 +304,8 @@ router.post(
       }
     }
   );
+
+
 
 
   module.exports = router;

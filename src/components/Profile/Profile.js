@@ -4,17 +4,13 @@ import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/constants';
 import axios from 'axios'
 import { 
     Container, 
-    //Row, 
     Col, 
     Breadcrumb, 
     BreadcrumbItem, 
     Card, 
-    //Button, 
     CardImg, 
     CardTitle, 
     CardText, 
-    //CardGroup,
-    //CardSubtitle, 
     CardBody
 } from 'reactstrap';
 

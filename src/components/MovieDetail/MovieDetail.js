@@ -21,22 +21,27 @@ import { UncontrolledCarousel } from 'reactstrap';
 import axios from 'axios';
 import './MovieDetail.css';
 import imageDummy from '../../images/318x180.svg';
-import thumbUpLike from '../../images/like.svg';
+import thumbUpLike from '../../images/favNo.svg';
+import favNo from '../../images/favNo.svg';
+import favYes from '../../images/favYes.svg';
 import { Link } from "react-router-dom";
 import {THEMOVIEDB_API_URL, THEMOVIEDB_API_KEY} from '../../constants/constants';
 import {slugify} from "../../utils/Helpers"
+import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/constants';
+
 
 class MovieDetail extends Component{
 
     //this.history = useHistory();
 
     //Adding class constructor that assigns the initial state values
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.next = this.next.bind(this)
         this.previous = this.previous.bind(this)
         this.goToIndex = this.goToIndex.bind(this)
         this.goToDetailPage = this.goToDetailPage.bind(this)
+        this.addToFav = this.addToFav.bind(this)
         this.state = {
             id:'',
             title: '',
@@ -55,6 +60,11 @@ class MovieDetail extends Component{
             activeIndex: 0,
             animating: false,
             slides:[],
+
+            successMessage: null,
+            errorMessage: null,
+
+            isFavoriteItem: false,
 
         };
     }
@@ -83,7 +93,50 @@ class MovieDetail extends Component{
 
     componentDidMount(){
         const {params} =this.props.match;
-        this.getDetail(params.id)
+        this.getDetail(params.id);
+        this.checkFavoriteItem(params.id)
+    }
+    addToFav(movieId){
+        this.setState({'successMessage':null});
+        this.setState({'errorMessage':null});
+        if(localStorage.getItem(ACCESS_TOKEN_NAME)){
+            axios.post(API_BASE_URL+'/api/user/add-favorite',{id:movieId}, { headers: { 'token': localStorage.getItem(ACCESS_TOKEN_NAME) }})
+            .then((response) => {
+                if(response.status === 200){
+                    this.setState({successMessage : response.data.msg})
+                    this.setState({isFavoriteItem:true});
+                }else if(response.status === 403){
+                    this.setState({errorMessage : response.data.msg})
+
+                }else{
+                    this.setState({errorMessage : "Please try again later."})
+                }
+            })
+            .catch((error) => {
+                this.setState({errorMessage : "Please try again later."})
+                console.log(error)
+            });
+
+        }else{
+            this.setState({
+                errorMessage:"Please login to add this item into your favorite list."
+            })
+        }
+    }
+    checkFavoriteItem(recId){
+        if(localStorage.getItem(ACCESS_TOKEN_NAME)){
+            axios.post(API_BASE_URL+'/api/user/check-favorite?time='+new Date().getTime(), {id:recId}, { headers: { 'token': localStorage.getItem(ACCESS_TOKEN_NAME), 'Cache-Control':'no-cache' }})
+            .then((response) => {
+              if(response.status === 200){
+                    this.setState({isFavoriteItem:response.data.isFavorite});
+                }
+            })
+            .catch((error) => {
+                //this.setState({errorMessage : "Please try again later."})
+                console.log(error)
+            });
+
+        }
     }
     
     getDetail(recId){
@@ -133,9 +186,7 @@ class MovieDetail extends Component{
     getRecommendations(movieId){
         axios.get(THEMOVIEDB_API_URL+'/3/movie/'+movieId+'/recommendations?api_key='+THEMOVIEDB_API_KEY+'&language=en-US&page=1')
         .then(response =>{
-            console.log(response.data)
             this.setState({totalItemsCount:response.data.total_results})
-
             let modifiedRes =  response.data.results.map((item,index)=>{
                 response.data.results[index].image = imageDummy
                 if(item.poster_path){
@@ -159,7 +210,7 @@ class MovieDetail extends Component{
                     onExited={() => this.setState({animating : false}) }
                     key={item.id}
                   >
-                    <img className="img-fluid" src={item.image} alt={item.title} />
+                    <img className="w-100" src={item.image} alt={item.title} />
                     
                     <CarouselCaption className="text-white" captionText={''} captionHeader={item.title} />
                     
@@ -171,14 +222,11 @@ class MovieDetail extends Component{
                 );
 
                 i++;
-
-                //return modifiedItem;
             });
             
-            console.log("generateSlides");
-            console.log(generateSlides);
 
             this.setState({slides : generateSlides});
+            //set slides
 
         }).catch(err=>{
             console.log("Fetching data in LatestMovies.js err")
@@ -188,12 +236,17 @@ class MovieDetail extends Component{
 
     //The render method contains the JSX code which will be compiled to HTML.
     render(){
-        let videoIframe = '';
-        if(this.state.video){
-            videoIframe = <li class="list-group-item d-flex justify-content-between align-items-center">
-                                 <iframe width="100%" height="315" src={this.state.video} frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                          </li>
+        var videoIframe = 'No video found.';
+        if(this.state.video!=''){
+            videoIframe = <iframe width="100%" height="315" src={this.state.video} frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         }
+        let favItem = <img onClick={() => this.addToFav(this.state.id)} className="ml-1" src={favNo} width="20" height="20"/>
+        if(this.state.isFavoriteItem){
+            favItem = <img className="ml-1" src={favYes} width="20" height="20"/>
+        }else{
+
+        }
+
         return(
 
             <Container>
@@ -202,42 +255,55 @@ class MovieDetail extends Component{
                     <BreadcrumbItem><a href="/">Home</a></BreadcrumbItem>
                     <BreadcrumbItem active>Movie Detail</BreadcrumbItem>
                 </Breadcrumb>
+
+                <div className="alert alert-success mt-2" style={{display: this.state.successMessage ? 'block' : 'none' }} role="alert">
+                    {this.state.successMessage}
+                </div>
+                 <div className="alert alert-danger mt-2" style={{display: this.state.errorMessage ? 'block' : 'none' }} role="alert">
+                    {this.state.errorMessage}
+                </div>
+
                     
-                <h1 className="mt-2">{this.state.title}</h1>
+                <h1 className="mt-2">
+                    {this.state.title}
+                    {favItem}
+                </h1>
                 <small>Release date: {this.state.release_date}</small>
                 
                 <ul class="list-group">
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <li class="list-group-item">
                     Production companies:
                     {this.state.production_companies.map((item)=>(
-                        <span class="badge badge-secondary">{item.name}</span>
+                        <span class="badge badge-secondary float-right ml-1">{item.name}</span>
                     ))}
 
                   </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <li class="list-group-item">
                      Production countries:
                     {this.state.production_countries.map((item)=>(
-                        <span class="badge badge-info">{item.name}</span>
+                        <span class="badge badge-info float-right ml-1">{item.name}</span>
                     ))}
                   </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <li class="list-group-item ">
                     Spoken languages:
                     {this.state.spoken_languages.map((item)=>(
-                        <span class="badge badge-success">{item.name}</span>
+                        <span class="badge badge-success float-right ml-1">{item.name}</span>
                     ))}
                   </li>
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <li class="list-group-item ">
                     Total Vote:
-                    <span class="badge badge-dark">{this.state.vote_count}</span>
+                    <span class="badge badge-dark float-right">{this.state.vote_count}</span>
                   </li>
                  
-                    {videoIframe}
+                    <li class="list-group-item ">
+                        {videoIframe}
+                    </li>
 
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <li class="list-group-item ">
                          {this.state.description}
                     </li>
 
-                     <li class="list-group-item d-flex justify-content-between align-items-center">
+                     <li class="list-group-item">
 
                      <CardImg className="mt-2" top width="100%" src={this.state.image} alt={this.state.title} />
 
@@ -245,13 +311,14 @@ class MovieDetail extends Component{
 
                 </ul>
 
-                <h1 className="mt-2 border-top">Recommendations</h1>
-                <div> 
+                
+                <div className="col-12"> 
+                <h1 className="mt-4">Recommendations</h1>
+
                     <style>
                     {
                       `.custom-tag {
                           max-width: 100%;
-                          height: 500px;
                           background: black;
                         }`
                     }
