@@ -1,17 +1,13 @@
 import React, {Component} from 'react';
 import { 
-    Container, 
-    //Row, 
+    Container,  
     Col, 
     Breadcrumb, 
     BreadcrumbItem, 
     Card, 
-    //Button, 
     CardImg, 
     CardTitle, 
-    CardText, 
-    //CardGroup,
-    //CardSubtitle, 
+    CardText,
     CardBody
 } from 'reactstrap';
 import './TopRatedMovies.css';
@@ -20,6 +16,8 @@ import imageDummy from '../../images/318x180.svg';
 import thumbUpLike from '../../images/like.svg';
 import { Link } from "react-router-dom";
 import {THEMOVIEDB_API_URL, THEMOVIEDB_API_KEY} from '../../constants/constants';
+import PaginationComponent from "react-reactstrap-pagination";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 class TopRatedMovies extends Component{
     //Adding class constructor that assigns the initial state values
@@ -30,31 +28,44 @@ class TopRatedMovies extends Component{
             title: '',
             image: '',
             description:'',
-            moviesArrTopRated:[],
+            recordsArr:[],
+            selectedPage: 1,
+            pageSize:20,
+            totalItemsCount:0,
+            maxPaginationNumbers:5,
         };
+
+        this.handleSelected = this.handleSelected.bind(this);
     }
 
     //This is called when an instance of this component is being created and inserted into the DOM.
     componentWillMount(){
+        this.getRecords(1)
+    }
 
-            //Get top_rated movies
-            axios.get(THEMOVIEDB_API_URL+'/3/movie/top_rated?api_key='+THEMOVIEDB_API_KEY+'&language=en-US&page=1')
-            .then(response =>{
-                let modifiedRes =  response.data.results.map((item,index)=>{
-                    response.data.results[index].image = imageDummy
-                    if(item.poster_path){
-                        response.data.results[index].image = 'https://image.tmdb.org/t/p/w200/'+item.poster_path;
-                    }
-                    return item;
-                });
-                this.setState({moviesArrTopRated : modifiedRes})
-            })
-            .catch(err=>{
-                console.log("Fetching data in LatestMovies.js err")
-                console.log(err)
-            })
+    getRecords(pageNumber){
+        //Get top_rated movies
+        axios.get(THEMOVIEDB_API_URL+'/3/movie/top_rated?api_key='+THEMOVIEDB_API_KEY+'&language=en-US&page='+pageNumber)
+        .then(response =>{
+            this.setState({totalItemsCount:response.data.total_results})
+            let modifiedRes =  response.data.results.map((item,index)=>{
+                response.data.results[index].image = imageDummy
+                if(item.poster_path){
+                    response.data.results[index].image = 'https://image.tmdb.org/t/p/w200/'+item.poster_path;
+                }
+                return item;
+            });
+            this.setState({recordsArr : modifiedRes})
+        })
+        .catch(err=>{
+            console.log("Fetching data in LatestMovies.js err")
+            console.log(err)
+        })
+    }
 
-           
+    handleSelected(pageNumber) {
+        this.setState({ selectedPage: pageNumber });
+        this.getRecords(pageNumber)
     }
 
     //The render method contains the JSX code which will be compiled to HTML.
@@ -68,9 +79,20 @@ class TopRatedMovies extends Component{
                     </Breadcrumb>
                
                     <h1 className="mt-2">Top Rated Movies</h1>
-        
+            
+                    <div className="row ml-0">
+                        <PaginationComponent
+                          size="sm"
+                          totalItems={this.state.totalItemsCount}
+                          pageSize={this.state.pageSize}
+                          onSelect={this.handleSelected}
+                          maxPaginationNumbers={this.state.maxPaginationNumbers}
+                          defaultActivePage={1}
+                        />
+                    </div>
+
                     <div className="row border-bottom">
-                        {this.state.moviesArrTopRated.map((item,index) =>(
+                        {this.state.recordsArr.map((item,index) =>(
                             <Col sm="4">
                                 <Card className="mt-4">
                                     <CardImg top width="" src={item.image} alt={item.title} />

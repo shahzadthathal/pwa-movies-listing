@@ -55,6 +55,7 @@
     "react-app-polyfill": "^1.0.6",
     "react-dev-utils": "^10.2.1",
     "react-dom": "^16.13.1",
+    "react-reactstrap-pagination": "^2.0.3",
     "react-router-dom": "^5.2.0",
     "reactstrap": "^8.6.0",
     "resolve": "1.15.0",
