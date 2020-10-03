@@ -23,7 +23,7 @@ import AlertComponent from './components/AlertComponent/AlertComponent';
 
 import PrivateRoute from './utils/PrivateRoute';
 import Profile from './components/Profile/Profile';
-
+import FavoriteItems from './components/FavoriteItems/FavoriteItems';
 
 
 
@@ -46,6 +46,9 @@ function App() {
 
               <PrivateRoute path="/profile">
                 <Profile/>
+              </PrivateRoute>
+              <PrivateRoute path="/favorite-movies" exact={true}>
+                <FavoriteItems />
               </PrivateRoute>
 
               <Route path="/latest-movies" exact={true}>

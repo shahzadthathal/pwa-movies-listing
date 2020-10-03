@@ -26,17 +26,11 @@ router.post("/check-favorite", auth, [
             });
       }
       const itemId = parseInt(req.body.id);
-      console.log("typeof itme id")
-      console.log(typeof(itemId))
       const userId = req.user.id;
-      console.log("itemId "+itemId)
-      console.log("userId "+userId)
       let favItemExists = await User.findOne({
                 _id:userId,
                 favoriteItemsArr:itemId
             });
-      console.log("favItemExists")
-      console.log(favItemExists)
       if (favItemExists) {
           return res.status(200).json({
               isFavorite:true,
@@ -75,14 +69,12 @@ router.post("/add-favorite", auth, [
                 msg: "Please select movie"
             });
       }
-      const itemId = req.body.id;
+      const itemId = parseInt(req.body.id);
       const userId = req.user.id;
       let favItemExists = await User.findOne({
                 _id:userId,
                 favoriteItemsArr:itemId
             });
-      console.log("add favItemExists")
-      console.log(favItemExists)
       if (favItemExists) {
           return res.status(403).json({
               msg: "Item already exists"
@@ -92,17 +84,13 @@ router.post("/add-favorite", auth, [
         let updateObj = {};
 
         if(favItemExists){
-              console.log("req 1")
               if(favItemExists.favoriteItemsArr==null){
-                console.log("req 2")
                 updateObj.favoriteItemsArr = [];
               }
               else{
-                console.log("req 3")
                 updateObj.favoriteItemsArr = favItemExists.favoriteItemsArr;
               }
         }else{
-            console.log("req 4")
             let userFound = await User.findOne({_id:userId});
             if(userFound.favoriteItemsArr){
               updateObj.favoriteItemsArr = userFound.favoriteItemsArr;
@@ -112,11 +100,6 @@ router.post("/add-favorite", auth, [
             
         }
 
-        // updateObj.favoriteItemsArr.push({
-        //     item_id:itemId,
-        //     created_at:Date.now()
-        // });
-        console.log(updateObj)
         updateObj.favoriteItemsArr.push(itemId);
 
         await User.findOneAndUpdate({'_id': userId}, {$set:updateObj}, {new: true}, (err, user) => {
@@ -135,6 +118,55 @@ router.post("/add-favorite", auth, [
               });
             }
         });
+      }
+    } catch (err) {
+      throw err;
+      return res.status(500).json({
+            msg: "Server Error",
+            error: err.message
+
+          });
+    }
+  });
+
+/**
+ * @method - POST
+ * @description - Remove item from user favorite list
+ * @param - /user/remove-favorite
+ */
+router.post("/remove-favorite", auth, [
+        check('id', "Please select movie").not().isEmpty(),
+    ], async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+            return res.status(400).json({
+                errors: errors.array(),
+                msg: "Please select movie"
+            });
+      }
+      const itemId = parseInt(req.body.id);
+      const userId = req.user.id;
+      let favItemExists = await User.findOne({
+                _id:userId,
+                favoriteItemsArr:itemId
+            });
+      console.log("add favItemExists")
+      console.log(favItemExists)
+      if (favItemExists) {
+        let updated = await User.update(
+            { _id:userId, },
+            { $pull: { 'favoriteItemsArr': itemId } }
+          );
+        console.log(updated)
+        return res.status(200).json({
+              msg: "Item removed."
+          });
+
+      }else{
+         return res.status(200).json({
+              msg: "Item already removed."
+          });
       }
     } catch (err) {
       throw err;

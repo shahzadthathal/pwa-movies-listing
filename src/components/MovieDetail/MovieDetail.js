@@ -123,6 +123,36 @@ class MovieDetail extends Component{
             })
         }
     }
+    removeFav(movieId){
+        
+        this.setState({'successMessage':null});
+        this.setState({'errorMessage':null});
+        if(localStorage.getItem(ACCESS_TOKEN_NAME)){
+            axios.post(API_BASE_URL+'/api/user/remove-favorite',{id:movieId}, { headers: { 'token': localStorage.getItem(ACCESS_TOKEN_NAME) }})
+            .then((response) => {
+                if(response.status === 200){
+                    this.setState({successMessage : response.data.msg})
+                     this.setState({isFavoriteItem:false});
+
+                }else if(response.status === 403){
+                    this.setState({errorMessage : response.data.msg})
+                     this.setState({isFavoriteItem:false});
+                }else{
+                    this.setState({errorMessage : "Please try again later."})
+                }
+            })
+            .catch((error) => {
+                this.setState({errorMessage : "Please try again later."})
+                console.log(error)
+            });
+
+        }else{
+            this.setState({
+                errorMessage:"Please login to add this item into your favorite list."
+            })
+        }
+    }
+
     checkFavoriteItem(recId){
         if(localStorage.getItem(ACCESS_TOKEN_NAME)){
             axios.post(API_BASE_URL+'/api/user/check-favorite?time='+new Date().getTime(), {id:recId}, { headers: { 'token': localStorage.getItem(ACCESS_TOKEN_NAME), 'Cache-Control':'no-cache' }})
@@ -242,7 +272,7 @@ class MovieDetail extends Component{
         }
         let favItem = <img onClick={() => this.addToFav(this.state.id)} className="ml-1" src={favNo} width="20" height="20"/>
         if(this.state.isFavoriteItem){
-            favItem = <img className="ml-1" src={favYes} width="20" height="20"/>
+            favItem = <img onClick={() => this.removeFav(this.state.id)} className="ml-1" src={favYes} width="20" height="20"/>
         }else{
 
         }

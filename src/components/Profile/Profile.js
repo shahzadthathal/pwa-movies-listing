@@ -1,5 +1,5 @@
 import React,{ useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/constants';
 import axios from 'axios'
 import { 
@@ -15,6 +15,7 @@ import {
 } from 'reactstrap';
 
 import './Profile.css';
+
 
 
 function Profile(props) {
@@ -87,19 +88,20 @@ function Profile(props) {
                     <div class="profile-usermenu sidebar-sticky">
                       <ul class="nav flex-column">
                         <li class="active nav-item">
-                          <a href="#" class="nav-link active">
+                          <Link to={`/profile`} className="nav-link active">
                         <i class="fa fa-home"></i>
-                        Overview </a>
+                        Overview </Link>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="https://codepen.io/jasondavis/pen/jVRwaG?editors=1000">
+                          <Link to={`/profile`} className="nav-link">
                         <i class="fa fa-user"></i>
-                        Account Settings </a>
+                        Account Settings </Link>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="#" target="_blank">
+                        
+                        <Link to={`/favorite-movies`} className="nav-link">
                         <i class="fa fa-check"></i>
-                        Favourite Movies </a>
+                        Favourite Movies</Link>
                         </li>
                         <li class="nav-item">
                           <a class="nav-link" href="#">
