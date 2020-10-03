@@ -1,17 +1,13 @@
 import React, {Component} from 'react';
 import { 
-    Container, 
-    //Row, 
+    Container,
     Col, 
     Breadcrumb, 
     BreadcrumbItem, 
-    Card, 
-    //Button, 
+    Card,
     CardImg, 
     CardTitle, 
     CardText, 
-    //CardGroup,
-    //CardSubtitle, 
     CardBody
 } from 'reactstrap';
 import axios from 'axios';
@@ -64,23 +60,39 @@ class MovieDetail extends Component{
             this.setState({production_countries: data.production_countries})
             this.setState({spoken_languages: data.spoken_languages})
             this.setState({vote_count: data.vote_count})
-        });
+        }).catch(err=>{
+            console.log("Fetching data in LatestMovies.js err")
+            console.log(err)
+        })
 
         axios.get(THEMOVIEDB_API_URL+'/3/movie/'+recId+'/videos?api_key='+THEMOVIEDB_API_KEY+'&language=en-US')
         .then(response =>{
-           let data = response.data.results[0];
-            this.setState({ video: data.key });
-            this.setState({ site: data.site });
-            this.setState({ type: data.type });
-            if(data.site == 'YouTube'){
-                this.setState({ video: 'https://www.youtube.com/embed/'+data.key });
+            let data = response.data.results[0];
+            console.log("MovieDetail video data")
+            console.log(response.data)
+            if(data !='undefined'){
+                this.setState({ video: data.key });
+                this.setState({ site: data.site });
+                this.setState({ type: data.type });
+                if(data.site == 'YouTube'){
+                    this.setState({ video: 'https://www.youtube.com/embed/'+data.key });
+                }
             }
-        });
+        }).catch(err=>{
+            console.log("Fetching data in LatestMovies.js err")
+            console.log(err)
+        })
 
     }
 
     //The render method contains the JSX code which will be compiled to HTML.
     render(){
+        const videoIframe = '';
+        if(this.state.video){
+            videoIframe = <li class="list-group-item d-flex justify-content-between align-items-center">
+                                 <iframe width="100%" height="315" src={this.state.video} frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                          </li>
+        }
         return(
             <Container>
                 
@@ -116,10 +128,8 @@ class MovieDetail extends Component{
                         Total Vote:
                         <span class="badge badge-dark">{this.state.vote_count}</span>
                       </li>
-
-                      <li class="list-group-item d-flex justify-content-between align-items-center">
-                             <iframe width="100%" height="315" src={this.state.video} frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                      </li>
+                     
+                        {videoIframe}
 
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                              {this.state.description}

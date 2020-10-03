@@ -61,7 +61,7 @@ function App() {
                 <UpcomingMovies />
               </Route>
 
-              <Route path="/movie-detail/:id" component={MovieDetail} />
+              <Route path="/movie-detail/:title/:id" component={MovieDetail} />
 
               <Route path="/signup">
                 <Register showError={updateErrorMessage} updateTitle={updateTitle}/>

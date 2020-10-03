@@ -1,17 +1,13 @@
 import React, {Component} from 'react';
 import { 
     Container, 
-    //Row, 
     Col, 
     Breadcrumb, 
     BreadcrumbItem, 
-    Card, 
-    //Button, 
+    Card,
     CardImg, 
     CardTitle, 
     CardText, 
-    //CardGroup,
-    //CardSubtitle, 
     CardBody
 } from 'reactstrap';
 import './Home.css';
@@ -20,6 +16,7 @@ import imageDummy from '../../images/318x180.svg';
 import thumbUpLike from '../../images/like.svg';
 import { Link } from "react-router-dom";
 import {THEMOVIEDB_API_URL, THEMOVIEDB_API_KEY} from '../../constants/constants';
+import {slugify} from "../../utils/Helpers"
 
 class Home extends Component{
     //Adding class constructor that assigns the initial state values
@@ -40,7 +37,6 @@ class Home extends Component{
     componentWillMount(){
 
             //Get popular movies
-            //movie/popular?api_key='+THEMOVIEDB_API_KEY+'&language=en-US&page=1'
             axios.get(THEMOVIEDB_API_URL+'/3/discover/movie?api_key='+THEMOVIEDB_API_KEY+'&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1')
             .then(response =>{
                 let modifiedRes =  response.data.results.map((item,index)=>{
@@ -50,8 +46,6 @@ class Home extends Component{
                     }
                     return item;
                 });
-                console.log("DISCOVER MOVIES")
-                console.log(modifiedRes)
                 this.setState({moviesArrPopular : modifiedRes})
             })
             .catch(err=>{
@@ -126,7 +120,7 @@ class Home extends Component{
                                              Original language: {item.original_language.toUpperCase()}
                                             </li>
                                         </ul>
-                                        <Link to={`/movie-detail/${item.id}`} className="btn btn-secondary btn-md  mx-auto d-block">Detail</Link>
+                                        <Link to={`/movie-detail/${slugify(item.title)}/${item.id}`} className="btn btn-secondary btn-md  mx-auto d-block">Detail</Link>
                                     </CardBody>
                                 </Card>
                             </Col>
@@ -155,7 +149,7 @@ class Home extends Component{
                                              Original language: {item.original_language.toUpperCase()}
                                             </li>
                                         </ul>
-                                        <Link to={`/movie-detail/${item.id}`} className="btn btn-secondary btn-md  mx-auto d-block">Detail</Link>
+                                        <Link to={`/movie-detail/${slugify(item.title)}/${item.id}`} className="btn btn-secondary btn-md  mx-auto d-block">Detail</Link>
                                     </CardBody>
                                 </Card>
                             </Col>
@@ -184,7 +178,7 @@ class Home extends Component{
                                              Original language: {item.original_language.toUpperCase()}
                                             </li>
                                         </ul>
-                                        <Link to={`/movie-detail/${item.id}`} className="btn btn-secondary btn-md  mx-auto d-block">Detail</Link>
+                                        <Link to={`/movie-detail/${slugify(item.title)}/${item.id}`} className="btn btn-secondary btn-md  mx-auto d-block">Detail</Link>
                                     </CardBody>
                                 </Card>
                             </Col>

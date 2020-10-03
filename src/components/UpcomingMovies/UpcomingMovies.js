@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import {THEMOVIEDB_API_URL, THEMOVIEDB_API_KEY} from '../../constants/constants';
 import PaginationComponent from "react-reactstrap-pagination";
 import "bootstrap/dist/css/bootstrap.min.css";
+import {slugify} from "../../utils/Helpers"
 
 class UpcomingMovies extends Component{
     //Adding class constructor that assigns the initial state values
@@ -110,7 +111,7 @@ class UpcomingMovies extends Component{
                                              Original language: {item.original_language.toUpperCase()}
                                             </li>
                                         </ul>
-                                        <Link to={`/movie-detail/${item.id}`} className="btn btn-secondary btn-md  mx-auto d-block">Detail</Link>
+                                        <Link to={`/movie-detail/${slugify(item.title)}/${item.id}`} className="btn btn-secondary btn-md  mx-auto d-block">Detail</Link>
                                     </CardBody>
                                 </Card>
                             </Col>
