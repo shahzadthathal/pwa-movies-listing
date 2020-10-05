@@ -193,12 +193,12 @@ class FavoriteItems extends Component{
                          	
                         </li>
                         <li class="nav-item">
-                          <Link to={`/profile`} className="nav-link">
+                          <Link to={`/account-settings`} className="nav-link">
                         <i class="fa fa-user"></i>
                         Account Settings </Link>
                         </li>
                         <li class="active nav-item">
-                          	<Link to={`/profile`} className="nav-link">
+                          	<Link to={`/favorite-movies`} className="nav-link">
 	                        	<i class="fa fa-check"></i>
 	                        Favourite Movies 
 	                        </Link>

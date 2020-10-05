@@ -23,8 +23,8 @@ import AlertComponent from './components/AlertComponent/AlertComponent';
 
 import PrivateRoute from './utils/PrivateRoute';
 import Profile from './components/Profile/Profile';
+import AccountSettings from './components/AccountSettings/AccountSettings';
 import FavoriteItems from './components/FavoriteItems/FavoriteItems';
-
 
 
 function App() {
@@ -46,6 +46,9 @@ function App() {
 
               <PrivateRoute path="/profile">
                 <Profile/>
+              </PrivateRoute>
+              <PrivateRoute path="/account-settings" updateTitle={updateTitle}>
+                <AccountSettings/>
               </PrivateRoute>
               <PrivateRoute path="/favorite-movies" exact={true}>
                 <FavoriteItems />

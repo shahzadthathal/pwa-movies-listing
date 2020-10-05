@@ -40,7 +40,6 @@ function Register(props) {
                 "email":state.email,
                 "password":state.password,
             }
-            console.log("API_BASE_URL: "+API_BASE_URL)
             axios.post(API_BASE_URL+'/api/user/register', payload)
                 .then(function (response) {
                     if(response.status === 200){

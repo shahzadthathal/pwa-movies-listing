@@ -1,7 +1,9 @@
 import React,{ useEffect, useState } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/constants';
-import axios from 'axios'
+import axios from 'axios';
+import Moment from 'moment';
+
 import { 
     Container, 
     Col, 
@@ -22,6 +24,8 @@ function Profile(props) {
   const [state , setState] = useState({
         full_name : "",
         email : "",
+        created_at: 0,
+        from_now:0,
     })
 
     useEffect(() => {
@@ -37,7 +41,9 @@ function Profile(props) {
               //This method will rerender dom after updating value
               setState({
                 'full_name' : response.data.full_name,
-                'email' : response.data.email
+                'email' : response.data.email,
+                'created_at': Moment(response.data.created_at).format('YYYY-MM-DD HH:mm:ss'),
+                'from_now': Moment(response.data.created_at).fromNow(),
               })
 
               //Don't do this, this method will not rerender dom
@@ -93,7 +99,7 @@ function Profile(props) {
                         Overview </Link>
                         </li>
                         <li class="nav-item">
-                          <Link to={`/profile`} className="nav-link">
+                          <Link to={`/account-settings`} className="nav-link">
                         <i class="fa fa-user"></i>
                         Account Settings </Link>
                         </li>
@@ -115,8 +121,11 @@ function Profile(props) {
                 </div>
                 <div class="col-md-9">
                   <div class="profile-content mb-2">
-                    Some user related content goes here...
-                    <h2>{state.email} </h2>
+                    <h1>Welcom to your profile</h1>
+                    <p>Your name: {state.full_name}</p>
+                    <p>Your email: {state.email} </p>
+                    <p>Register at: {state.created_at} </p>
+
                   </div>
                 </div>
               </div>

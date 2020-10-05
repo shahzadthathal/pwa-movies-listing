@@ -11,6 +11,77 @@ const auth = require("../middleware/auth")
 
 /**
  * @method - POST
+ * @description - Update user profile
+ * @param - /user/account-settings
+ */
+
+ router.post(
+    "/account-settings", 
+    auth,
+    [
+        check('full_name', "Please Enter a Valid Name").not().isEmpty(),
+    ],
+    async (req, res) => {
+        
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                errors: errors.array()
+            });
+        }
+        let updateObj = {};
+        updateObj.full_name = req.body.full_name;
+        const userId = req.user.id;
+        const currentPassword = req.body.currentPassword;
+        //Check current password and update password here
+        if(currentPassword){
+          //New password
+          const password = req.body.password || '';
+          if(password.length < 6){
+            return res.status(400).json({
+              message: "Minimum 6 characters required for password."
+            });
+          }
+          let user = await User.findOne({_id:userId});
+          if (!user)
+            return res.status(400).json({
+              message: "User Not Exist"
+            });
+          const isMatch = await bcrypt.compare(currentPassword, user.password);
+          if (!isMatch)
+            return res.status(400).json({message: "Incorrect Password !"});
+          else{
+            const salt = await bcrypt.genSalt(10);
+            updateObj.password = await bcrypt.hash(password, salt);
+          }
+        }
+
+        try {
+          await User.findOneAndUpdate({'_id': userId}, {$set:updateObj}, {new: true}, (err, user) => {
+            if (err){
+              return res.status(500).json({
+                msg: "Server Error",
+                error: err.message
+              });
+            }
+            if(user) {
+              return res.status(200).send({ msg: "User Updated" });
+            } else {
+                return res.status(500).json({
+                msg: "User not found",
+              });
+            }
+          });
+        } catch (err) {
+            console.log(err.message);
+            res.status(500).send("Error in Saving");
+        }
+    }
+);
+
+
+/**
+ * @method - POST
  * @description - Check item into user favorite list
  * @param - /user/check-favorite
  */
@@ -209,9 +280,7 @@ router.post(
         })
     ],
     async (req, res) => {
-        console.log(req.body.full_name)
-        console.log(req.body.email)
-        console.log(req.body.password)
+       
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({
