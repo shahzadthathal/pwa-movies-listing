@@ -7,6 +7,59 @@ const router = express.Router();
 const User = require("../model/User");
 const auth = require("../middleware/auth")
 
+const Constants = require("../config/constants");
+//console.log(Constants.DEV_FILESTACK_API_KEY)
+const FilestackJs = require('filestack-js').init(Constants.DEV_FILESTACK_API_KEY);
+
+
+/**
+ * @method - POST
+ * @description - Update user profile pic
+ * @param - /user/upload-image
+ */
+
+router.post(
+    "/upload-image", 
+    auth,
+    async (req, res) => {
+        
+        console.log("req.files")
+        console.log(req.files)
+
+        //Date.now()+'-'+ req.files.name
+
+        if(!req.files) {
+           return res.status(400).json({
+              status: false,
+                message: 'No file uploaded'
+          });
+        }else {
+
+          let updateObj = {};
+          const userId = req.user.id;
+
+          const formData = new FormData()
+          formData.append('image',req.files)
+
+           FilestackJs.upload(formData)
+            .then(resFilestackJs => {
+              console.log('File uploaded: ', resFilestackJs)
+               return res.status(200).json({
+                  resFilestackJs:resFilestackJs,
+                });
+            })
+            .catch(err => {
+              console.log(err)
+
+              return res.status(400).json({
+              status: false,
+                message: err.message
+              });
+
+            });
+        }
+    }
+);
 
 
 /**

@@ -26,6 +26,8 @@ function Header(props) {
 
 	function renderOnBoardMethods() {
 		//APPLY OTHER LOGIC
+		console.log("Header.js local storage")
+		console.log(localStorage.getItem(ACCESS_TOKEN_NAME) )
 		if(localStorage.getItem(ACCESS_TOKEN_NAME)){
 			return(
 				<Nav className="ml-auto" navbar>

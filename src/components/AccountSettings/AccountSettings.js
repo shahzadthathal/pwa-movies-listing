@@ -16,6 +16,9 @@ import './AccountSettings.css';
 import { Link , Redirect, withRouter} from "react-router-dom";
 import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/constants';
 
+import ReactFilestack from 'filestack-react';
+
+
 class AccountSettings extends Component{
 
 	constructor(props){
@@ -131,6 +134,16 @@ class AccountSettings extends Component{
         }
     }
 
+    fileUploadedHandler(res){
+        console.log('fileUploadedHandler res')
+        console.log(res)
+        if(res.filesUploaded.length>0){
+            console.log("filenames")
+            console.log(res.filesUploaded[0])
+            console.log(res.filesUploaded[0].url)
+        }
+    }
+
     render(){
 
     	return(
@@ -152,6 +165,18 @@ class AccountSettings extends Component{
                     
                     <div class="profile-userpic">
                       <img src="https://media.rockstargames.com/chinatownwars/global/downloads/avatars/zhou_256x256.jpg" class="img-responsive" alt=""/>
+                    </div>
+                    <div class="d-flex justify-content-center profile-usertitle-job">
+                   
+                    <ReactFilestack
+                        apikey={'A8YB5Y89OQQuEzIMMqQqXz'}
+                        componentDisplayMode={{
+                          type: 'button',
+                          customText: 'Change picture',
+                          customClass: 'some-custom-class'
+                        }}
+                        onSuccess={this.fileUploadedHandler}
+                        />
                     </div>
                    
                     <div class="profile-usertitle">

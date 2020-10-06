@@ -3,6 +3,8 @@ import { Link, withRouter } from 'react-router-dom';
 import { ACCESS_TOKEN_NAME, API_BASE_URL } from '../../constants/constants';
 import axios from 'axios';
 import Moment from 'moment';
+import {slugify} from "../../utils/Helpers"
+
 
 import { 
     Container, 
@@ -26,6 +28,7 @@ function Profile(props) {
         email : "",
         created_at: 0,
         from_now:0,
+        selectedFile:null,
     })
 
     useEffect(() => {
@@ -59,6 +62,29 @@ function Profile(props) {
     function redirectToLogin() {
         props.history.push('/login');
     }
+    
+    
+    const fileSelect = event =>{
+        document.getElementById("selectImage").click()
+    }
+
+    const fileSelectedHandler = event => {
+      console.log(event.target.files[0])
+      
+      const formData = new FormData();
+      formData.append('image',event.target.files[0])
+     
+       axios.post(API_BASE_URL+'/api/user/upload-image', formData, { headers: { 'token': localStorage.getItem(ACCESS_TOKEN_NAME) }})
+       .then((response)=>{
+          console.log("File upload response")
+          console.log(response)
+       })
+       .catch((err)=>{
+          console.log("File upload error")
+          console.log(err)
+       })
+    }
+    
     return(
 
       <Container>
@@ -75,21 +101,35 @@ function Profile(props) {
                     
                     <div class="profile-userpic">
                       <img src="https://media.rockstargames.com/chinatownwars/global/downloads/avatars/zhou_256x256.jpg" class="img-responsive" alt=""/>
+                      
                     </div>
+                   
+                   {/* <div class="d-flex justify-content-center profile-usertitle-job">
+                      <input 
+                          id='selectImage'
+                          style={{"display":"none"}} 
+                          type="file" 
+                          onChange={fileSelectedHandler}
+                          />
+                          <span style={{"pointer-events":"all","cursor":"pointer"}} onClick={fileSelect}>Edit Picture</span>
+
+                    </div>
+                  */}
                    
                     <div class="profile-usertitle">
                       <div class="profile-usertitle-name">
                         {state.full_name}
                       </div>
                       <div class="profile-usertitle-job">
-                        Developer
+                        Software Developer
                       </div>
                     </div>
                    
-                    <div class="profile-userbuttons">
-                      <button type="button" class="btn btn-success btn-sm">Follow</button>
-                      <button type="button" class="btn btn-danger btn-sm">Message</button>
-                    </div>
+                    {/* <div class="profile-userbuttons">
+                       <button type="button" class="btn btn-success btn-sm">Follow</button>
+                       <button type="button" class="btn btn-danger btn-sm">Message</button>
+                     </div>
+                    */}
                    
                     <div class="profile-usermenu sidebar-sticky">
                       <ul class="nav flex-column">
