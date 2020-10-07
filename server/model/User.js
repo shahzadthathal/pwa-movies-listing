@@ -23,6 +23,10 @@ const UserSchema = mongoose.Schema({
     type:String,
     default:''
   },
+  bio:{
+    type:String,
+    default:''
+  },
 });
 
 // export model user with UserSchema

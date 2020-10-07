@@ -30,6 +30,7 @@ class FavoriteItems extends Component{
         	full_name: '',
         	email : "",
             image : "",
+            bio : "",
         	favoriteItemsArr:[],
         	recordsArr:[],
         	successMessage: null,
@@ -53,6 +54,7 @@ class FavoriteItems extends Component{
                 'full_name' : response.data.full_name,
                 'email' : response.data.email,
                 'image' : response.data.image,
+                'bio' : response.data.bio,
                 'favoriteItemsArr': response.data.favoriteItemsArr
               })
 
@@ -183,7 +185,7 @@ class FavoriteItems extends Component{
                         {this.state.full_name}
                       </div>
                       <div class="profile-usertitle-job">
-                        Developer
+                        {this.state.bio}
                       </div>
                     </div>
                    

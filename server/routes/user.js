@@ -132,6 +132,9 @@ router.post(
         }
         let updateObj = {};
         updateObj.full_name = req.body.full_name;
+        if(req.body.bio){
+          updateObj.bio = req.body.bio;
+        }
         const userId = req.user.id;
         const currentPassword = req.body.currentPassword;
         //Check current password and update password here

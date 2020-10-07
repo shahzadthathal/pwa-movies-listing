@@ -27,6 +27,7 @@ function Profile(props) {
         full_name : "",
         email : "",
         image : "",
+        bio : "",
         created_at: 0,
         from_now:0,
         selectedFile:null,
@@ -47,6 +48,7 @@ function Profile(props) {
                 'full_name' : response.data.full_name,
                 'email' : response.data.email,
                 'image' : response.data.image,
+                'bio' : response.data.bio,
                 'created_at': Moment(response.data.created_at).format('YYYY-MM-DD HH:mm'),
                 'from_now': Moment(response.data.created_at).fromNow(),
               })
@@ -126,7 +128,7 @@ function Profile(props) {
                         {state.full_name}
                       </div>
                       <div class="profile-usertitle-job">
-                        Software Developer
+                        {state.bio}
                       </div>
                     </div>
                    
@@ -167,7 +169,7 @@ function Profile(props) {
                 <div class="col-md-9">
                   <div class="profile-content mb-2">
                     <h1>Welcom to your profile</h1>
-                    <p>Your name: {state.full_name}</p>
+                    
                     <p>Your email: {state.email} </p>
                     <p>Register at: {state.created_at} </p>
 

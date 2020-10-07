@@ -30,6 +30,7 @@ class AccountSettings extends Component{
         	full_name: '',
         	email : "",
             image : "",
+            bio : "",
         	successMessage: null,
             errorMessage: null,
             currentPassword : "",
@@ -52,6 +53,7 @@ class AccountSettings extends Component{
                 'full_name' : response.data.full_name,
                 'email' : response.data.email,
                 'image' : response.data.image,
+                'bio' : response.data.bio,
               })
     		}
     	})
@@ -107,6 +109,7 @@ class AccountSettings extends Component{
             if(this.state.full_name.length) {
                 const payload={
                     "full_name":this.state.full_name,
+                    "bio":this.state.bio,
                 }
                 if(this.state.currentPassword){
                     payload.currentPassword =  this.state.currentPassword;
@@ -210,7 +213,7 @@ class AccountSettings extends Component{
                         {this.state.full_name}
                       </div>
                       <div class="profile-usertitle-job">
-                        Developer
+                        {this.state.bio}
                       </div>
                     </div>
                    
@@ -270,6 +273,17 @@ class AccountSettings extends Component{
                                     aria-describedby="emailHelp" 
                                     placeholder="Enter Full Name" 
                                     value={this.state.full_name}
+                                    onChange={this.handleChange}
+                                />
+                            </div>
+                            <div className="form-group text-left">
+                                <label htmlFor="exampleInputBio">Your Bio</label>
+                                <input type="text" 
+                                    className="form-control" 
+                                    id="bio" 
+                                    aria-describedby="emailHelp" 
+                                    placeholder="Software Developer" 
+                                    value={this.state.bio}
                                     onChange={this.handleChange}
                                 />
                             </div>
