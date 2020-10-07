@@ -29,6 +29,7 @@ class FavoriteItems extends Component{
         this.state = {
         	full_name: '',
         	email : "",
+            image : "",
         	favoriteItemsArr:[],
         	recordsArr:[],
         	successMessage: null,
@@ -51,6 +52,7 @@ class FavoriteItems extends Component{
     		 this.setState({
                 'full_name' : response.data.full_name,
                 'email' : response.data.email,
+                'image' : response.data.image,
                 'favoriteItemsArr': response.data.favoriteItemsArr
               })
 
@@ -148,6 +150,13 @@ class FavoriteItems extends Component{
 
     render(){
 
+        let imageUrl = '';
+        if(this.state.image){
+            imageUrl = <img src={this.state.image} class="img-responsive" alt="" width="150" height="150"/>
+        }else{
+            imageUrl = <img src="https://media.rockstargames.com/chinatownwars/global/downloads/avatars/zhou_256x256.jpg" class="img-responsive" alt=""/>
+        }
+
     	return(
 
     		<Container>
@@ -166,7 +175,7 @@ class FavoriteItems extends Component{
                   <div class="profile-sidebar mb-2">
                     
                     <div class="profile-userpic">
-                      <img src="https://media.rockstargames.com/chinatownwars/global/downloads/avatars/zhou_256x256.jpg" class="img-responsive" alt=""/>
+                      {imageUrl}
                     </div>
                    
                     <div class="profile-usertitle">

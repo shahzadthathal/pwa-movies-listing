@@ -64,6 +64,54 @@ router.post(
 
 /**
  * @method - POST
+ * @description - Update user profile picture
+ * @param - /user/profile-picture
+ */
+
+ router.post(
+    "/profile-picture", 
+    auth,
+    [
+        check('imageUrl', "Please select image.").not().isEmpty(),
+    ],
+    async (req, res) => {
+        
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                errors: errors.array()
+            });
+        }
+        let updateObj = {};
+        updateObj.image = req.body.imageUrl;
+        const userId = req.user.id;
+
+        try {
+          await User.findOneAndUpdate({'_id': userId}, {$set:updateObj}, {new: true}, (err, user) => {
+            if (err){
+              return res.status(500).json({
+                msg: "Server Error",
+                error: err.message
+              });
+            }
+            if(user) {
+              return res.status(200).send({ msg: "User Updated" });
+            } else {
+                return res.status(500).json({
+                msg: "User not found",
+              });
+            }
+          });
+        } catch (err) {
+            console.log(err.message);
+            res.status(500).send("Error in Saving");
+        }
+    }
+);
+
+
+/**
+ * @method - POST
  * @description - Update user profile
  * @param - /user/account-settings
  */

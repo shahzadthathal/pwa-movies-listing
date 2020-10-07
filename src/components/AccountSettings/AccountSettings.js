@@ -25,9 +25,11 @@ class AccountSettings extends Component{
         super(props);
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmitClick = this.handleSubmitClick.bind(this)
+        this.fileUploadedHandler = this.fileUploadedHandler.bind(this)
         this.state = {
         	full_name: '',
         	email : "",
+            image : "",
         	successMessage: null,
             errorMessage: null,
             currentPassword : "",
@@ -49,6 +51,7 @@ class AccountSettings extends Component{
     		 this.setState({
                 'full_name' : response.data.full_name,
                 'email' : response.data.email,
+                'image' : response.data.image,
               })
     		}
     	})
@@ -112,9 +115,7 @@ class AccountSettings extends Component{
                 
                 axios.post(API_BASE_URL+'/api/user/account-settings', payload, { headers: { 'token': localStorage.getItem(ACCESS_TOKEN_NAME) }})
                     .then((response) =>{
-                        console.log("resposne after updateing ")
-                        console.log(response)
-                        if(response.status === 200){
+                         if(response.status === 200){
                             this.setState({
                                 'successMessage' : 'Account settings updated redirecting to profile page...'
                             })
@@ -135,16 +136,41 @@ class AccountSettings extends Component{
     }
 
     fileUploadedHandler(res){
-        console.log('fileUploadedHandler res')
-        console.log(res)
         if(res.filesUploaded.length>0){
-            console.log("filenames")
-            console.log(res.filesUploaded[0])
-            console.log(res.filesUploaded[0].url)
+            let picUrl = res.filesUploaded[0].url;
+            if(picUrl){
+                const payload ={
+                    imageUrl: picUrl
+                }
+
+                axios.post(API_BASE_URL+'/api/user/profile-picture', payload, { headers: { 'token': localStorage.getItem(ACCESS_TOKEN_NAME) }})
+                    .then((response) =>{
+                        if(response.status === 200){
+                            this.setState({
+                                'successMessage' : 'Account settings updated redirecting to profile page...'
+                            })
+                            //localStorage.setItem(ACCESS_TOKEN_NAME,response.data.token);
+                            this.redirectToProfile();
+                        } else{
+                            this.setState({'errorMessage':"Some error ocurred"});
+                        }
+                    })
+                    .catch((error)=> {
+                        console.log(error);
+                        this.setState({'errorMessage':"Some error ocurred"});
+                    }); 
+            }
         }
     }
 
     render(){
+
+        let imageUrl = '';
+        if(this.state.image){
+            imageUrl = <img src={this.state.image} class="img-responsive" alt="" width="150" height="150"/>
+        }else{
+            imageUrl = <img src="https://media.rockstargames.com/chinatownwars/global/downloads/avatars/zhou_256x256.jpg" class="img-responsive" alt=""/>
+        }
 
     	return(
 
@@ -164,7 +190,7 @@ class AccountSettings extends Component{
                   <div class="profile-sidebar mb-2">
                     
                     <div class="profile-userpic">
-                      <img src="https://media.rockstargames.com/chinatownwars/global/downloads/avatars/zhou_256x256.jpg" class="img-responsive" alt=""/>
+                      {imageUrl}
                     </div>
                     <div class="d-flex justify-content-center profile-usertitle-job">
                    

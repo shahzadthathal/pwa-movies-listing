@@ -26,6 +26,7 @@ function Profile(props) {
   const [state , setState] = useState({
         full_name : "",
         email : "",
+        image : "",
         created_at: 0,
         from_now:0,
         selectedFile:null,
@@ -37,15 +38,16 @@ function Profile(props) {
             if(response.status !== 200){
               redirectToLogin()
             }else{
-              console.log("Loged in user data")
-              console.log(response.data.full_name)
+             // console.log("Loged in user data")
+              //console.log(response.data.full_name)
 
 
               //This method will rerender dom after updating value
               setState({
                 'full_name' : response.data.full_name,
                 'email' : response.data.email,
-                'created_at': Moment(response.data.created_at).format('YYYY-MM-DD HH:mm:ss'),
+                'image' : response.data.image,
+                'created_at': Moment(response.data.created_at).format('YYYY-MM-DD HH:mm'),
                 'from_now': Moment(response.data.created_at).fromNow(),
               })
 
@@ -69,15 +71,13 @@ function Profile(props) {
     }
 
     const fileSelectedHandler = event => {
-      console.log(event.target.files[0])
-      
       const formData = new FormData();
       formData.append('image',event.target.files[0])
      
        axios.post(API_BASE_URL+'/api/user/upload-image', formData, { headers: { 'token': localStorage.getItem(ACCESS_TOKEN_NAME) }})
        .then((response)=>{
-          console.log("File upload response")
-          console.log(response)
+         // console.log("File upload response")
+          //console.log(response)
        })
        .catch((err)=>{
           console.log("File upload error")
@@ -85,8 +85,13 @@ function Profile(props) {
        })
     }
     
-    return(
+    let imageUrl = <img src="https://media.rockstargames.com/chinatownwars/global/downloads/avatars/zhou_256x256.jpg" class="img-responsive" alt=""/>
+    if(state.image){
+      imageUrl = <img src={state.image} class="img-responsive" alt="" width="150" height="150"/>
+    }
 
+    return(
+       
       <Container>
                
             <Breadcrumb className="mt-2" tag="nav" listTag="div">
@@ -100,7 +105,7 @@ function Profile(props) {
                   <div class="profile-sidebar mb-2">
                     
                     <div class="profile-userpic">
-                      <img src="https://media.rockstargames.com/chinatownwars/global/downloads/avatars/zhou_256x256.jpg" class="img-responsive" alt=""/>
+                      {imageUrl}
                       
                     </div>
                    
@@ -115,7 +120,7 @@ function Profile(props) {
 
                     </div>
                   */}
-                   
+
                     <div class="profile-usertitle">
                       <div class="profile-usertitle-name">
                         {state.full_name}
