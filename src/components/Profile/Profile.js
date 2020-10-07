@@ -87,7 +87,7 @@ function Profile(props) {
        })
     }
     
-    let imageUrl = <img src="https://media.rockstargames.com/chinatownwars/global/downloads/avatars/zhou_256x256.jpg" class="img-responsive" alt=""/>
+    let imageUrl = <img src="https://media.rockstargames.com/chinatownwars/global/downloads/avatars/zhou_256x256.jpg" class="img-responsive" alt="" width="150" height="150"/>
     if(state.image){
       imageUrl = <img src={state.image} class="img-responsive" alt="" width="150" height="150"/>
     }

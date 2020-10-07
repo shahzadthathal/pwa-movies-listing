@@ -156,7 +156,7 @@ class FavoriteItems extends Component{
         if(this.state.image){
             imageUrl = <img src={this.state.image} class="img-responsive" alt="" width="150" height="150"/>
         }else{
-            imageUrl = <img src="https://media.rockstargames.com/chinatownwars/global/downloads/avatars/zhou_256x256.jpg" class="img-responsive" alt=""/>
+            imageUrl = <img src="https://media.rockstargames.com/chinatownwars/global/downloads/avatars/zhou_256x256.jpg" class="img-responsive" alt="" width="150" height="150"/>
         }
 
     	return(
